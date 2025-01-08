@@ -1,109 +1,103 @@
 #ifndef LISTARRAY_H
 #define LISTARRAY_H
 
+#include "List.h"
 #include <stdexcept>
 #include <ostream>
-#include "List.h"
 
 template <typename T>
 class ListArray : public List<T> {
 private:
-    T* arr;  // Puntero al array que almacena los elementos
-    int max;  // Tamaño actual del array
-    int n;    // Número de elementos en la lista
-    static const int MINSIZE = 2;  // Tamaño mínimo del array
+    T* arr;              // Puntero al array dinámico
+    int max;             // Capacidad actual del array
+    int n;               // Número de elementos en la lista
+    static const int MINSIZE = 2; // Tamaño mínimo del array
 
-    // Método privado para redimensionar el array
+    // Redimensiona el array al nuevo tamaño especificado
     void resize(int new_size) {
-        T* new_arr = new T[new_size];  // Crear nuevo array
+        T* new_arr = new T[new_size];
         for (int i = 0; i < n; ++i) {
-            new_arr[i] = arr[i];  // Copiar los elementos
+            new_arr[i] = arr[i];
         }
-        delete[] arr;  // Liberar la memoria del viejo array
-        arr = new_arr;  // Actualizar el puntero
-        max = new_size;  // Actualizar el tamaño máximo
+        delete[] arr;
+        arr = new_arr;
+        max = new_size;
     }
 
 public:
-    // Constructor sin argumentos
-    ListArray() {
-        arr = new T[MINSIZE];
-        max = MINSIZE;
-        n = 0;
-    }
+    // Constructor
+    ListArray() : arr(new T[MINSIZE]), max(MINSIZE), n(0) {}
 
     // Destructor
     ~ListArray() {
         delete[] arr;
     }
 
-    // Implementación de los métodos de la interfaz List<T>
-
-    // Inserta un elemento en una posición dada
+    // Inserta un elemento en la posición especificada
     void insert(int pos, T e) override {
         if (pos < 0 || pos > n) {
-            throw std::out_of_range("Posición fuera de rango");
+            throw std::out_of_range("Position out of range");
         }
-        if (n == max) {  // Si el array está lleno, lo redimensionamos
-            resize(max * 2);  // Duplicamos el tamaño
+        if (n == max) {
+            resize(max * 2);
         }
         for (int i = n; i > pos; --i) {
-            arr[i] = arr[i - 1];  // Desplazar los elementos hacia la derecha
+            arr[i] = arr[i - 1];
         }
-        arr[pos] = e;  // Insertar el nuevo elemento
+        arr[pos] = e;
         ++n;
     }
 
-    // Inserta un elemento al final de la lista
+    // Añade un elemento al final de la lista
     void append(T e) override {
-        insert(n, e);  // append es un caso particular de insert
+        insert(n, e);
     }
 
-    // Inserta un elemento al principio de la lista
+    // Añade un elemento al principio de la lista
     void prepend(T e) override {
-        insert(0, e);  // prepend es un caso particular de insert
+        insert(0, e);
     }
 
-    // Elimina y devuelve el elemento en una posición dada
+    // Elimina y devuelve un elemento en la posición especificada
     T remove(int pos) override {
         if (pos < 0 || pos >= n) {
-            throw std::out_of_range("Posición fuera de rango");
+            throw std::out_of_range("Position out of range");
         }
-        T removed_element = arr[pos];
+        T removed = arr[pos];
         for (int i = pos; i < n - 1; ++i) {
-            arr[i] = arr[i + 1];  // Desplazar los elementos hacia la izquierda
+            arr[i] = arr[i + 1];
         }
         --n;
         if (n < max / 4 && max / 2 >= MINSIZE) {
-            resize(max / 2);  // Reducir el tamaño si está demasiado vacío
+            resize(max / 2);
         }
-        return removed_element;
+        return removed;
     }
 
-    // Devuelve el elemento en una posición dada
+    // Devuelve el elemento en la posición especificada
     T get(int pos) override {
         if (pos < 0 || pos >= n) {
-            throw std::out_of_range("Posición fuera de rango");
+            throw std::out_of_range("Position out of range");
         }
         return arr[pos];
     }
 
-    // Busca un elemento y devuelve su posición
+    // Devuelve la posición de la primera ocurrencia de un elemento
     int search(T e) override {
         for (int i = 0; i < n; ++i) {
             if (arr[i] == e) {
                 return i;
             }
         }
-        return -1;  // Elemento no encontrado
+        return -1;
     }
 
-    // Devuelve true si la lista está vacía
+    // Indica si la lista está vacía
     bool empty() override {
         return n == 0;
     }
 
-    // Devuelve el número de elementos en la lista
+    // Devuelve el número de elementos de la lista
     int size() override {
         return n;
     }
@@ -111,12 +105,12 @@ public:
     // Sobrecarga del operador []
     T operator[](int pos) {
         if (pos < 0 || pos >= n) {
-            throw std::out_of_range("Posición fuera de rango");
+            throw std::out_of_range("Position out of range");
         }
         return arr[pos];
     }
 
-    // Sobrecarga global del operador << para imprimir la lista
+    // Sobrecarga del operador <<
     friend std::ostream& operator<<(std::ostream &out, const ListArray<T> &list) {
         out << "[";
         for (int i = 0; i < list.n; ++i) {
@@ -130,5 +124,5 @@ public:
     }
 };
 
-#endif  // LISTARRAY_H
+#endif // LISTARRAY_H
 

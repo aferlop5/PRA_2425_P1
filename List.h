@@ -1,37 +1,38 @@
 #ifndef LIST_H
 #define LIST_H
 
-#include <stdexcept> // Para std::out_of_range
-
-template <typename T> 
+template <typename T>
 class List {
     public:
-        // Método para insertar un elemento en una posición específica
+        // Inserta el elemento e en la posición pos.
+        // Lanza una excepción std::out_of_range si pos no es válido.
         virtual void insert(int pos, T e) = 0;
 
-        // Método para agregar un elemento al final de la lista
+        // Inserta el elemento e al final de la lista.
         virtual void append(T e) = 0;
 
-        // Método para agregar un elemento al principio de la lista
+        // Inserta el elemento e al principio de la lista.
         virtual void prepend(T e) = 0;
 
-        // Método para eliminar y devolver un elemento en una posición específica
+        // Elimina y devuelve el elemento situado en la posición pos.
+        // Lanza una excepción std::out_of_range si pos no es válido.
         virtual T remove(int pos) = 0;
 
-        // Método para obtener un elemento en una posición específica
+        // Devuelve el elemento situado en la posición pos.
+        // Lanza una excepción std::out_of_range si pos no es válido.
         virtual T get(int pos) = 0;
 
-        // Método para buscar un elemento y devolver su posición
+        // Devuelve la posición de la primera ocurrencia del elemento e, o -1 si no se encuentra.
         virtual int search(T e) = 0;
 
-        // Método para verificar si la lista está vacía
+        // Indica si la lista está vacía.
         virtual bool empty() = 0;
 
-        // Método para obtener el número de elementos en la lista
+        // Devuelve el número de elementos de la lista.
         virtual int size() = 0;
 
-        // Destructor virtual para asegurar la destrucción correcta de clases derivadas
-        virtual ~List() {}
+        // Virtual destructor para garantizar la limpieza adecuada en las subclases.
+        virtual ~List() = default;
 };
 
 #endif // LIST_H

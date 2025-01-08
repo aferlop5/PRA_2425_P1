@@ -6,19 +6,18 @@
 template <typename T>
 class Node {
 public:
-    T data;              // El dato almacenado en el nodo
-    Node<T>* next;       // Puntero al siguiente nodo (o nullptr si es el último)
+    T data;                // Elemento almacenado en el nodo
+    Node<T>* next;         // Puntero al siguiente nodo
 
-    // Constructor: Inicializa el nodo con un valor y un puntero al siguiente nodo (por defecto nullptr)
-    Node(T data, Node<T>* next = nullptr) 
-        : data(data), next(next) {}
+    // Constructor
+    Node(T data, Node<T>* next = nullptr) : data(data), next(next) {}
 
-    // Sobrecarga del operador << para imprimir el contenido de un nodo
+    // Sobrecarga del operador <<
     friend std::ostream& operator<<(std::ostream &out, const Node<T> &node) {
         out << node.data;
         return out;
     }
 };
 
-#endif  // NODE_H
+#endif // NODE_H
 
